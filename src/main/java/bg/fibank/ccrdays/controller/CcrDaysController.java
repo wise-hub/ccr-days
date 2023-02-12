@@ -25,7 +25,6 @@ public class CcrDaysController {
             json.put("result", result);
         } catch (IllegalArgumentException ex) {
             json.put("error", ex.getMessage());
-            return new ResponseEntity<>(json, HttpStatus.OK);
         }
         return new ResponseEntity<>(json, HttpStatus.OK);
     }
