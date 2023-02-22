@@ -87,11 +87,22 @@ public class CcrDaysService {
             throw new IllegalArgumentException("existing loan request (count check)");
         }
 */
-        if (ccrDaysRepository.checkLoanRequestInt(ccrDays) == 0) {
+        if (ccrDaysRepository.checkLoanRequestInt(ccrDays) > 0) {
             System.out.println("existing loan request v2 (count check)");
             throw new IllegalArgumentException("existing loan request (count check)");
         }
-        
+
+        if (ccrDaysRepository.checkCcrDays(new CcrDays(
+                ccrDays.getEgnNumber(),
+                ccrDays.getLoanRequest())) > 0) {
+
+            return "request saved";
+
+        } else {
+            return "request not saved";
+        }
+
+        /*
         try {
             ccrDaysRepository.checkCcrDays(new CcrDays(
                     ccrDays.getEgnNumber(),
@@ -102,6 +113,8 @@ public class CcrDaysService {
             System.out.println(e);
             return "error:" +  e;
         }
+
+         */
     }
 
 }
