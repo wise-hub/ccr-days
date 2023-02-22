@@ -8,6 +8,8 @@ public interface CcrDaysRepository {
 
     String checkLoanRequest(CcrDays ccrDays);
 
+    int checkLoanRequestInt(CcrDays ccrDays);
+
     int updateSessionTime(String authToken);
 
 }

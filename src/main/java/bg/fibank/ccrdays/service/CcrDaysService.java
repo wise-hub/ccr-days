@@ -5,9 +5,6 @@ import bg.fibank.ccrdays.repository.CcrDaysRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.stream.IntStream;
-
 @Service
 public class CcrDaysService {
     @Autowired
@@ -50,8 +47,16 @@ public class CcrDaysService {
         }
     }
 
+    public int checkLoanRequestInt(CcrDays ccrDays) {
+        try {
+            return ccrDaysRepository.checkLoanRequestInt(ccrDays);
+        } catch (Exception e) {
+            System.out.println(e);
+            return 0;
+        }
+    }
 
-    public int updateSessionTime(String authToken) {
+    public int updateSessionTime(String authToken) throws Exception {
         try {
             return ccrDaysRepository.updateSessionTime(authToken);
         } catch (Exception e) {
@@ -71,12 +76,22 @@ public class CcrDaysService {
             System.out.println("invalid egn");
             throw new IllegalArgumentException("invalid egn");
         }
-
+/*
         if (checkLoanRequest(ccrDays).equals(ccrDays.getLoanRequest())) {
             System.out.println("existing loan request");
             throw new IllegalArgumentException("existing loan request");
         }
 
+        if (checkLoanRequestInt(ccrDays) == 0) {
+            System.out.println("existing loan request v2 (count check)");
+            throw new IllegalArgumentException("existing loan request (count check)");
+        }
+*/
+        if (ccrDaysRepository.checkLoanRequestInt(ccrDays) == 0) {
+            System.out.println("existing loan request v2 (count check)");
+            throw new IllegalArgumentException("existing loan request (count check)");
+        }
+        
         try {
             ccrDaysRepository.checkCcrDays(new CcrDays(
                     ccrDays.getEgnNumber(),

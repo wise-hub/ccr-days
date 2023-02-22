@@ -2,10 +2,11 @@ package bg.fibank.ccrdays.repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.sql.Types;
 
 import bg.fibank.ccrdays.model.CcrDays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -51,9 +52,17 @@ public class CcrDaysRepositoryJdbc implements CcrDaysRepository {
     }
 
     @Override
+    public int checkLoanRequestInt(CcrDays ccrDays) throws DataAccessException {
+        String sql = "select count(1) from requests where id = ? and egn = ?";
+        System.out.println("checkLoanRequestInt: " + ccrDays.getLoanRequest() + " - " + ccrDays.getEgnNumber());
+        Object[] args = new Object[] { ccrDays.getLoanRequest(), ccrDays.getEgnNumber() };
+        return jdbcTemplate.queryForObject(sql, args, Integer.class);
+    }
+
+    @Override
     public int updateSessionTime(String authToken) {
 
-        String sql = "update users set SESSION_EXPIRY_DT = sysdate +1/24 where token = ?";
+        String sql = "update users set SESSION_EXPIRY_DT = sysdate + 1/24 where token = ?";
         System.out.println(authToken);
 
         return jdbcTemplate.update(sql,
