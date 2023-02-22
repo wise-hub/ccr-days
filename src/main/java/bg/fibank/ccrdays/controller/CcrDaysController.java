@@ -32,4 +32,22 @@ public class CcrDaysController {
         return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<Map<String, String>> updRecord(
+            @RequestHeader("auth-token") String authToken,
+            @RequestBody String test) {
+
+        Map<String, String> json = new HashMap<>();
+        try {
+            int result = ccrDaysService.updateSessionTime(authToken);
+            json.put("result", String.valueOf(result));
+        } catch (IllegalArgumentException ex) {
+            json.put("error", ex.getMessage());
+        } catch (Exception e) {
+            //json.put("error", "not found"); // PROD
+            json.put("error", String.valueOf(e)); // DEV
+        }
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+
 }

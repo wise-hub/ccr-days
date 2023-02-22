@@ -88,13 +88,12 @@ public class CcrDaysRepositoryJdbc implements CcrDaysRepository {
 
     @Override
     public int updateSessionTime(String authToken) {
-
+        // 809c8bba1ec75eac4740c6762a3a3c0415ad289677b2680fdebb17a371d0384a
         String sql = "update users set SESSION_EXPIRY_DT = sysdate + 1/24 where token = ?";
         System.out.println(authToken);
-
-        return jdbcTemplate.update(sql,
-                authToken
-        );
+        int result = jdbcTemplate.update(sql,authToken);
+        System.out.println(result);
+        return result;
     }
 
 }
